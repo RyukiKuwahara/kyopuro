@@ -1,0 +1,88 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cassert>
+#include<cmath>
+#include<vector>
+#include<map>
+#include<set>
+#include<string>
+#include<queue>
+#include<stack>
+using namespace std;
+#define MOD 1000000007
+#define MOD2 998244353
+#define INF ((1<<30)-1)
+#define LINF (1LL<<60)
+#define EPS (1e-10)
+typedef long long Int;
+typedef pair<Int, Int> P;
+
+Int dp[3300][2];
+Int h, w, n, x, y;
+vector<P> wall;
+
+Int fact[1100000], invfact[1100000], inv[1100000];
+
+void init(){
+    fact[0] = 1;
+    for(int i = 1;i < 1100000;i++)fact[i] = fact[i-1] * i % MOD;
+    inv[1] = 1;
+    for(int i = 2;i < 1100000;i++){
+        //MOD / i * i + MOD % i = 0
+        //MOD / i * i = - (MOD % i);
+        //inv[MOD/i] * inv[i] = - inv[MOD%i];
+        inv[i] = -inv[MOD%i] * (MOD / i) % MOD;
+        if(inv[i] < 0)inv[i] += MOD;
+    }
+    invfact[0] = 1;
+    for(int i = 1;i < 1100000;i++){
+        invfact[i] = invfact[i-1] * inv[i] % MOD;
+    }
+}
+
+Int nCk(Int n, Int k){
+//    n!/k!/(n-k)!
+    return fact[n] * invfact[k] % MOD * invfact[n-k] % MOD;      
+}
+
+Int route(P a, P b){
+    int x = b.first - a.first;
+    int y = b.second - a.second;
+    if(x < 0 || y < 0)return 0;
+    return nCk(x + y, x);
+                                  
+}
+
+int main(){
+    init();
+    cin >> h >> w >> n;
+    for(int i = 0;i < n;i++){
+        cin >> x >> y;
+        wall.push_back(P(x,y));
+    }
+    wall.push_back(P(1,1));
+    sort(wall.begin(), wall.end());
+    dp[0][0] = 1;
+    for(int i = 1;i <= n;i++){
+        for(int j = 0;j < i;j++){
+            dp[i][0] += dp[j][1] * route(wall[j], wall[i]) % MOD;
+            dp[i][0] %= MOD;
+            dp[i][1] += dp[j][0] * route(wall[j], wall[i]) % MOD;
+            dp[i][1] %= MOD;
+        }
+    }
+
+    P goal = P(h, w);
+    Int ban = 0;
+    for(int i = 1;i <= n;i++){
+        ban -= dp[i][0] * route(wall[i], goal) % MOD;
+        ban += dp[i][1] * route(wall[i], goal) % MOD;
+        ban %= MOD;
+    }
+    Int ans = (nCk(h+w-2, h-1) - ban) % MOD;
+    if(ans < 0)ans += MOD;
+    
+    cout << ans << endl;
+    return 0;
+}
