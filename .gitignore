@@ -1,0 +1,11 @@
+*.o
+*.obj
+*.a
+*.lib
+.vscode/
+*.swp
+.history
+opt/
+paiza/
+AHC/AHC11
+Asprova/Asprova8th
