@@ -9,3 +9,6 @@ opt/
 paiza/
 AHC/AHC11
 Asprova/Asprova8th
+**/**/*.exe
+**/*.exe
+web-test/
