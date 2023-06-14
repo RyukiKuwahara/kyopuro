@@ -4,8 +4,15 @@ import (
 	"bufio"
 	"container/heap"
 	"fmt"
+	"math"
+	"math/rand"
 	"os"
+	"sort"
 )
+
+var weight []int
+var stations []Point
+var customers []Point
 
 type Point struct {
 	x int
@@ -16,6 +23,11 @@ type Edge struct {
 	from, to int
 	cost     int
 	index    int
+}
+
+type Format struct {
+	P, B []int
+	cost int
 }
 
 type PriorityQueue []*Edge
@@ -44,7 +56,7 @@ func (pq *PriorityQueue) Pop() interface{} {
 	return e
 }
 
-func data_load(N, M, K *int, stations, customers *[]Point) [][]Edge {
+func data_load(N, M, K *int) [][]Edge {
 	r := bufio.NewReader(os.Stdin)
 	fmt.Fscan(r, N)
 	fmt.Fscan(r, M)
@@ -54,7 +66,7 @@ func data_load(N, M, K *int, stations, customers *[]Point) [][]Edge {
 		var p Point
 		fmt.Fscan(r, &p.x)
 		fmt.Fscan(r, &p.y)
-		*stations = append(*stations, p)
+		stations = append(stations, p)
 	}
 
 	graph := make([][]Edge, *N)
@@ -69,19 +81,20 @@ func data_load(N, M, K *int, stations, customers *[]Point) [][]Edge {
 		e2 := Edge{v, u, w, i}
 		graph[u] = append(graph[u], e1)
 		graph[v] = append(graph[v], e2)
+		weight = append(weight, w)
 	}
 
 	for i := 0; i < *K; i++ {
 		var p Point
 		fmt.Fscan(r, &p.x)
 		fmt.Fscan(r, &p.y)
-		*customers = append(*customers, p)
+		customers = append(customers, p)
 	}
 
 	return graph
 }
 
-func data_out(N, M, K int, stations, customers []Point, graph [][]Edge, P, B []int) {
+func data_out(N, M, K int, graph [][]Edge, P, B []int) {
 	w := bufio.NewWriter(os.Stdout)
 	defer w.Flush()
 	// fmt.Fprintln(w, N, M, K)
@@ -97,7 +110,7 @@ func data_out(N, M, K int, stations, customers []Point, graph [][]Edge, P, B []i
 	}
 }
 
-func prim(N, M, K int, stations, customers []Point, graph [][]Edge, P, B *[]int) {
+func prim(N, M, K int, graph [][]Edge, P, B *[]int) {
 	pq := make(PriorityQueue, 0)
 	heap.Init(&pq)
 	for _, edge := range graph[0] {
@@ -106,11 +119,12 @@ func prim(N, M, K int, stations, customers []Point, graph [][]Edge, P, B *[]int)
 	}
 	var used = make([]bool, N)
 	used[0] = true
+	(*P)[0] = 2000
 	for pq.Len() > 0 {
 		e := heap.Pop(&pq).(*Edge)
 		if !used[e.to] {
 			used[e.to] = true
-			(*P)[e.to] = 1000
+			(*P)[e.to] = 2000
 			(*B)[e.index] = 1
 			for _, edge := range graph[e.to] {
 				e := edge
@@ -125,13 +139,123 @@ func prim(N, M, K int, stations, customers []Point, graph [][]Edge, P, B *[]int)
 	// }
 }
 
+func genetic_algorithm(N, M, K int, f Format) Format {
+	rand.Seed(0)
+
+	var (
+		elite      = 20
+		candi_size = 100
+		step       = 100
+		maxiter    = 1000
+	)
+	var candi []Format
+	for i := 0; i < elite; i++ {
+		var nf Format
+		nf.P = append(nf.P, f.P...)
+		nf.B = append(nf.B, f.B...)
+		nf.P = mutate(nf.P, step)
+		candi = append(candi, nf)
+
+	}
+
+	for i := 0; i < maxiter; i++ {
+
+		//スコアを付ける
+		for j := 0; j < len(candi); j++ {
+			candi[j].cost = costf(candi[j])
+		}
+
+		sort.Slice(candi, func(i, j int) bool {
+			return candi[i].cost < candi[j].cost
+		})
+
+		// for j := 0; j < len(candi); j++ {
+		// 	fmt.Println(candi[j].cost)
+		// }
+		// fmt.Println(len(candi), cap(candi))
+		// fmt.Println(candi[0].cost)
+		// fmt.Print("\n\n\n")
+
+		candi = candi[:elite]
+
+		for len(candi) < candi_size {
+			rate := rand.Float64()
+
+			if rate < 0.8 {
+				c := rand.Intn(elite)
+				var nf Format
+				nf.P = append(nf.P, candi[c].P...)
+				nf.B = append(nf.B, candi[c].B...)
+				nf.P = mutate(nf.P, step)
+				candi = append(candi, nf)
+			} else {
+				c1 := rand.Intn(elite)
+				c2 := rand.Intn(elite)
+				var nf1, nf2 Format
+				nf1.P = append(nf1.P, candi[c1].P...)
+				nf1.B = append(nf1.B, candi[c1].B...)
+				nf2.P = append(nf2.P, candi[c2].P...)
+				nf2.B = append(nf2.B, candi[c2].B...)
+				nf1.P = crossover1(nf1.P, nf2.P)
+				candi = append(candi, nf1)
+			}
+		}
+	}
+	sort.Slice(candi, func(i, j int) bool {
+		return candi[i].cost < candi[j].cost
+	})
+
+	return candi[0]
+}
+
+func cnt_receiver(f Format) int {
+	received := make([]bool, len(customers))
+	for i := 0; i < len(stations); i++ {
+
+	}
+	return 1
+}
+
+func costf(f Format) int {
+	cost := 0
+	P := f.P
+	B := f.B
+
+	receiver_cnt := cnt_receiver(f)
+
+	for _, pow := range P {
+		cost += pow * pow
+	}
+	for i, w := range weight {
+		if B[i] == 1 {
+			cost += w
+		}
+	}
+	return cost
+}
+
+func mutate(P []int, step int) []int {
+	i := rand.Intn(len(P))
+
+	low := int(math.Max(0, float64(P[i]-step)))
+	high := int(math.Min(5000, float64(P[i]+step)))
+
+	P[i] = rand.Intn(high-low+1) + low
+	return P
+}
+
+func crossover1(P1, P2 []int) []int {
+	m := rand.Intn(len(P1)-2) + 1
+	return append(P1[:m], P2[m:]...)
+}
+
 func main() {
 	var N, M, K int
-	var stations []Point
-	var customers []Point
-	graph := data_load(&N, &M, &K, &stations, &customers)
+	graph := data_load(&N, &M, &K)
 	P := make([]int, N)
 	B := make([]int, M)
-	prim(N, M, K, stations, customers, graph, &P, &B)
-	data_out(N, M, K, stations, customers, graph, P, B)
+	prim(N, M, K, graph, &P, &B)
+	f := Format{P: P, B: B}
+	f = genetic_algorithm(N, M, K, f)
+	data_out(N, M, K, graph, f.P, f.B)
 }
