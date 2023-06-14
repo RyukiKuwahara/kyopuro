@@ -145,8 +145,8 @@ func genetic_algorithm(N, M, K int, f Format) Format {
 	var (
 		elite      = 20
 		candi_size = 100
-		step       = 100
-		maxiter    = 1000
+		step       = 500
+		maxiter    = 10
 	)
 	var candi []Format
 	for i := 0; i < elite; i++ {
@@ -173,7 +173,7 @@ func genetic_algorithm(N, M, K int, f Format) Format {
 		// 	fmt.Println(candi[j].cost)
 		// }
 		// fmt.Println(len(candi), cap(candi))
-		// fmt.Println(candi[0].cost)
+		fmt.Println(candi[0].cost)
 		// fmt.Print("\n\n\n")
 
 		candi = candi[:elite]
@@ -209,11 +209,25 @@ func genetic_algorithm(N, M, K int, f Format) Format {
 }
 
 func cnt_receiver(f Format) int {
-	received := make([]bool, len(customers))
+	received := make([]int, len(customers))
 	for i := 0; i < len(stations); i++ {
-
+		for j := 0; j < len(customers); j++ {
+			if calc_euclid(stations[i], customers[j]) < f.P[i] {
+				received[j] += 1
+			}
+		}
 	}
-	return 1
+	cnt := 0
+	for i := 0; i < len(received); i++ {
+		if received[i] > 0 {
+			cnt++
+		}
+	}
+	return cnt
+}
+
+func calc_euclid(a, b Point) int {
+	return int(math.Round(math.Sqrt(math.Pow(float64(b.x-a.x), 2) + math.Pow(float64(b.y-a.y), 2))))
 }
 
 func costf(f Format) int {
@@ -223,6 +237,10 @@ func costf(f Format) int {
 
 	receiver_cnt := cnt_receiver(f)
 
+	if receiver_cnt < len(B) {
+		return int(math.Round(math.Pow(10, 6) * float64(receiver_cnt) / float64(len(B))))
+	}
+
 	for _, pow := range P {
 		cost += pow * pow
 	}
@@ -231,7 +249,7 @@ func costf(f Format) int {
 			cost += w
 		}
 	}
-	return cost
+	return int(math.Round(math.Pow(10, 6) * ((1 + math.Pow(10, 8)) / (float64(cost) + math.Pow(10, 7)))))
 }
 
 func mutate(P []int, step int) []int {
