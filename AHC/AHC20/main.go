@@ -119,12 +119,12 @@ func prim(N, M, K int, graph [][]Edge, P, B *[]int) {
 	}
 	var used = make([]bool, N)
 	used[0] = true
-	(*P)[0] = 2000
+	(*P)[0] = 5000
 	for pq.Len() > 0 {
 		e := heap.Pop(&pq).(*Edge)
 		if !used[e.to] {
 			used[e.to] = true
-			(*P)[e.to] = 2000
+			(*P)[e.to] = 5000
 			(*B)[e.index] = 1
 			for _, edge := range graph[e.to] {
 				e := edge
@@ -274,6 +274,6 @@ func main() {
 	B := make([]int, M)
 	prim(N, M, K, graph, &P, &B)
 	f := Format{P: P, B: B}
-	f = genetic_algorithm(N, M, K, f)
+	// f = genetic_algorithm(N, M, K, f)
 	data_out(N, M, K, graph, f.P, f.B)
 }
