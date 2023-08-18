@@ -61,11 +61,11 @@ struct Solver {
         // for (int i = 0; i < N; i++) {
         //     temperature[landing_pos[i].y][landing_pos[i].x] = i * 10;
         // }
-        const int center = 750;
+        const int center = 550;
         for (int i = 0; i < L; i++){
             for (int j = 0; j < L; j++){
-                int distance = abs(L/2 - i - 1) + abs(L/2 - i - 1);
-                temperature[i][j] = center - distance * 4;
+                int distance = abs(L/2 - i) + abs(L/2 - i);
+                temperature[i][j] = center - distance;
             }
         }
         return temperature;
