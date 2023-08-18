@@ -3,8 +3,8 @@
 cd /home/ryuki/kyopuro/AHC/AHC22/tools
 
 src_file="../src/a.out"
-# ループで0000.txtから0099.txtまでを処理
-for i in {0..10}
+# ループで0000.txtから0050.txtまでを処理
+for i in {0..50}
 do
     input_file="./in/$(printf "%04d.txt" $i)"  # 入力ファイルのパス
     output_file="./out/$(printf "%04d.txt" $i)"  # 出力ファイルのパス
@@ -35,7 +35,7 @@ total_measurement_count=0
 total_count=0
 
 # ループで結果を処理
-for i in {0..10}
+for i in {0..50}
 do
     result_file="./std_err/$(printf "%04d.txt" $i)"
     
