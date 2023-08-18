@@ -1,0 +1,266 @@
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 15
+Number of wrong answers = 55
+Placement cost = 32366200
+Measurement cost = 65000
+Measurement count = 65
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 83
+Placement cost = 109547000
+Measurement cost = 95000
+Measurement count = 95
+    Finished release [optimized] target(s) in 0.07s
+     Running `target/release/tester ../src/a.out`
+Score = 2
+Number of wrong answers = 64
+Placement cost = 33466200
+Measurement cost = 66000
+Measurement count = 66
+    Finished release [optimized] target(s) in 0.08s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 88
+Placement cost = 81972400
+Measurement cost = 89000
+Measurement count = 89
+    Finished release [optimized] target(s) in 0.08s
+     Running `target/release/tester ../src/a.out`
+Score = 240650
+Number of wrong answers = 12
+Placement cost = 28394800
+Measurement cost = 61000
+Measurement count = 61
+    Finished release [optimized] target(s) in 0.07s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 80
+Placement cost = 63108200
+Measurement cost = 81000
+Measurement count = 81
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 92
+Placement cost = 97878000
+Measurement cost = 93000
+Measurement count = 93
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 88
+Placement cost = 83030600
+Measurement cost = 89000
+Measurement count = 89
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 3
+Number of wrong answers = 62
+Placement cost = 43420000
+Measurement cost = 71000
+Measurement count = 71
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 86
+Placement cost = 80031200
+Measurement cost = 87000
+Measurement count = 87
+    Finished release [optimized] target(s) in 0.08s
+     Running `target/release/tester ../src/a.out`
+Score = 16
+Number of wrong answers = 59
+Placement cost = 12310000
+Measurement cost = 61000
+Measurement count = 61
+    Finished release [optimized] target(s) in 0.05s
+     Running `target/release/tester ../src/a.out`
+Score = 1076126
+Number of wrong answers = 0
+Placement cost = 92731000
+Measurement cost = 95000
+Measurement count = 95
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 66
+Placement cost = 49557000
+Measurement cost = 73000
+Measurement count = 73
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 69
+Placement cost = 47588800
+Measurement cost = 76000
+Measurement count = 76
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 911224
+Number of wrong answers = 0
+Placement cost = 109546600
+Measurement cost = 96000
+Measurement count = 96
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 7
+Number of wrong answers = 58
+Placement cost = 34283600
+Measurement cost = 65000
+Measurement count = 65
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 91
+Placement cost = 102285000
+Measurement cost = 93000
+Measurement count = 93
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 74
+Placement cost = 56947600
+Measurement cost = 78000
+Measurement count = 78
+    Finished release [optimized] target(s) in 0.07s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 91
+Placement cost = 95016000
+Measurement cost = 98000
+Measurement count = 98
+    Finished release [optimized] target(s) in 0.07s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 66
+Placement cost = 48875600
+Measurement cost = 73000
+Measurement count = 73
+    Finished release [optimized] target(s) in 0.08s
+     Running `target/release/tester ../src/a.out`
+Score = 2
+Number of wrong answers = 65
+Placement cost = 34486600
+Measurement cost = 65000
+Measurement count = 65
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 88
+Placement cost = 87322800
+Measurement cost = 94000
+Measurement count = 94
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 5
+Number of wrong answers = 61
+Placement cost = 27115000
+Measurement cost = 62000
+Measurement count = 62
+    Finished release [optimized] target(s) in 0.05s
+     Running `target/release/tester ../src/a.out`
+Score = 5
+Number of wrong answers = 61
+Placement cost = 26948400
+Measurement cost = 62000
+Measurement count = 62
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 70
+Placement cost = 65974400
+Measurement cost = 90000
+Measurement count = 90
+    Finished release [optimized] target(s) in 0.05s
+     Running `target/release/tester ../src/a.out`
+Score = 5
+Number of wrong answers = 61
+Placement cost = 27591600
+Measurement cost = 62000
+Measurement count = 62
+    Finished release [optimized] target(s) in 0.08s
+     Running `target/release/tester ../src/a.out`
+Score = 7
+Number of wrong answers = 62
+Placement cost = 13958400
+Measurement cost = 65000
+Measurement count = 65
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 74
+Placement cost = 33578400
+Measurement cost = 74000
+Measurement count = 74
+    Finished release [optimized] target(s) in 0.05s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 95
+Placement cost = 45618200
+Measurement cost = 95000
+Measurement count = 95
+    Finished release [optimized] target(s) in 0.09s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 73
+Placement cost = 51531600
+Measurement cost = 76000
+Measurement count = 76
+    Finished release [optimized] target(s) in 0.08s
+     Running `target/release/tester ../src/a.out`
+Score = 3
+Number of wrong answers = 61
+Placement cost = 59350200
+Measurement cost = 79000
+Measurement count = 79
+    Finished release [optimized] target(s) in 0.07s
+     Running `target/release/tester ../src/a.out`
+Score = 4
+Number of wrong answers = 56
+Placement cost = 103618000
+Measurement cost = 96000
+Measurement count = 96
+    Finished release [optimized] target(s) in 0.05s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 70
+Placement cost = 42174800
+Measurement cost = 72000
+Measurement count = 72
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 69
+Placement cost = 44756800
+Measurement cost = 70000
+Measurement count = 70
+    Finished release [optimized] target(s) in 0.08s
+     Running `target/release/tester ../src/a.out`
+Score = 6
+Number of wrong answers = 60
+Placement cost = 27021600
+Measurement cost = 60000
+Measurement count = 60
+    Finished release [optimized] target(s) in 0.05s
+     Running `target/release/tester ../src/a.out`
+Score = 2782741
+Number of wrong answers = 0
+Placement cost = 35770800
+Measurement cost = 65000
+Measurement count = 65
+    Finished release [optimized] target(s) in 0.06s
+     Running `target/release/tester ../src/a.out`
+Score = 6
+Number of wrong answers = 60
+Placement cost = 25462600
+Measurement cost = 60000
+Measurement count = 60
+    Finished release [optimized] target(s) in 0.05s
+     Running `target/release/tester ../src/a.out`
+Score = 1
+Number of wrong answers = 68
+Placement cost = 94532200
+Measurement cost = 91000
+Measurement count = 91

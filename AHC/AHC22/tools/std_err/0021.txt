@@ -1,0 +1,7 @@
+    Finished release [optimized] target(s) in 0.07s
+     Running `target/release/tester ../src/a.out`
+Score = 5
+Number of wrong answers = 61
+Placement cost = 27115000
+Measurement cost = 62000
+Measurement count = 62

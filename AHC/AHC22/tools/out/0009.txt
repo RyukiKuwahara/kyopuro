@@ -1,0 +1,194 @@
+0 10 0 20 0 30 40 50 60 70
+80 90 100 0 110 120 130 140 150 0
+0 160 170 180 190 0 200 0 0 0
+210 0 0 220 0 230 0 240 0 0
+250 0 260 270 0 0 280 290 0 0
+300 0 310 320 0 330 340 350 0 360
+370 380 390 400 410 420 0 430 0 440
+0 450 460 470 480 0 490 500 0 0
+0 510 520 530 540 550 0 0 560 0
+0 570 0 0 0 580 590 0 600 0
+# measure i=0 y=0 x=0
+0 0 0
+# measure i=1 y=0 x=0
+1 0 0
+# measure i=2 y=0 x=0
+2 0 0
+# measure i=3 y=0 x=0
+3 0 0
+# measure i=4 y=0 x=0
+4 0 0
+# measure i=5 y=0 x=0
+5 0 0
+# measure i=6 y=0 x=0
+6 0 0
+# measure i=7 y=0 x=0
+7 0 0
+# measure i=8 y=0 x=0
+8 0 0
+# measure i=9 y=0 x=0
+9 0 0
+# measure i=10 y=0 x=0
+10 0 0
+# measure i=11 y=0 x=0
+11 0 0
+# measure i=12 y=0 x=0
+12 0 0
+# measure i=13 y=0 x=0
+13 0 0
+# measure i=14 y=0 x=0
+14 0 0
+# measure i=15 y=0 x=0
+15 0 0
+# measure i=16 y=0 x=0
+16 0 0
+# measure i=17 y=0 x=0
+17 0 0
+# measure i=18 y=0 x=0
+18 0 0
+# measure i=19 y=0 x=0
+19 0 0
+# measure i=20 y=0 x=0
+20 0 0
+# measure i=21 y=0 x=0
+21 0 0
+# measure i=22 y=0 x=0
+22 0 0
+# measure i=23 y=0 x=0
+23 0 0
+# measure i=24 y=0 x=0
+24 0 0
+# measure i=25 y=0 x=0
+25 0 0
+# measure i=26 y=0 x=0
+26 0 0
+# measure i=27 y=0 x=0
+27 0 0
+# measure i=28 y=0 x=0
+28 0 0
+# measure i=29 y=0 x=0
+29 0 0
+# measure i=30 y=0 x=0
+30 0 0
+# measure i=31 y=0 x=0
+31 0 0
+# measure i=32 y=0 x=0
+32 0 0
+# measure i=33 y=0 x=0
+33 0 0
+# measure i=34 y=0 x=0
+34 0 0
+# measure i=35 y=0 x=0
+35 0 0
+# measure i=36 y=0 x=0
+36 0 0
+# measure i=37 y=0 x=0
+37 0 0
+# measure i=38 y=0 x=0
+38 0 0
+# measure i=39 y=0 x=0
+39 0 0
+# measure i=40 y=0 x=0
+40 0 0
+# measure i=41 y=0 x=0
+41 0 0
+# measure i=42 y=0 x=0
+42 0 0
+# measure i=43 y=0 x=0
+43 0 0
+# measure i=44 y=0 x=0
+44 0 0
+# measure i=45 y=0 x=0
+45 0 0
+# measure i=46 y=0 x=0
+46 0 0
+# measure i=47 y=0 x=0
+47 0 0
+# measure i=48 y=0 x=0
+48 0 0
+# measure i=49 y=0 x=0
+49 0 0
+# measure i=50 y=0 x=0
+50 0 0
+# measure i=51 y=0 x=0
+51 0 0
+# measure i=52 y=0 x=0
+52 0 0
+# measure i=53 y=0 x=0
+53 0 0
+# measure i=54 y=0 x=0
+54 0 0
+# measure i=55 y=0 x=0
+55 0 0
+# measure i=56 y=0 x=0
+56 0 0
+# measure i=57 y=0 x=0
+57 0 0
+# measure i=58 y=0 x=0
+58 0 0
+# measure i=59 y=0 x=0
+59 0 0
+# measure i=60 y=0 x=0
+60 0 0
+-1 -1 -1
+55
+0
+0
+6
+43
+3
+54
+26
+46
+60
+9
+0
+45
+12
+0
+60
+60
+48
+24
+28
+37
+20
+0
+20
+60
+60
+58
+28
+25
+46
+0
+4
+34
+40
+41
+37
+3
+26
+54
+60
+50
+38
+27
+39
+0
+24
+60
+39
+60
+29
+43
+59
+8
+8
+59
+44
+28
+25
+7
+0
+38
