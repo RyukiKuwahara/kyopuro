@@ -70,7 +70,7 @@ struct Solver {
             // you can output comment
             cout << "# measure i=" << i_in << " y=0 x=0" << endl;
 
-            const int measure_cnt = 100;
+            const int measure_cnt = 40;
             int sum_measured_val = 0;
             for (int i = 0; i < measure_cnt; i++){
                 int measured_value = judge.measure(i_in, 0, 0);

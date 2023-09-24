@@ -1,0 +1,5 @@
+Average Score = 258693
+Average Number of wrong answers = 50
+Average Placement cost = 56369937
+Average Measurement cost = 7929411
+Average Measurement count = 7929

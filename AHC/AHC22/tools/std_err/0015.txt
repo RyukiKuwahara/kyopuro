@@ -2,6 +2,6 @@
      Running `target/release/tester ../src/a.out`
 Score = 1
 Number of wrong answers = 91
-Placement cost = 395600
-Measurement cost = 7440000
-Measurement count = 3720
+Placement cost = 102285000
+Measurement cost = 9300000
+Measurement count = 9300
