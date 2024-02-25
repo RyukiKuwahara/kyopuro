@@ -147,30 +147,37 @@ def get_has_oil(x, fields):
             has_oil.add((si+i, sj+j))
     return has_oil
 
+def calc_max_p(arr):
+    min_ll = min([ll for _, ll in arr])
+    probs = []
+    for _, ll in arr:
+        probs.append(math.exp(ll - min_ll))
+    max_p = max(probs) / sum(probs)
+
+    return max_p, arr[0][0]
+
 def solve_Bayes(N, M, eps, fields):
     X = get_X(N, M, fields)
     sum_lll = [0] * len(X)
 
     pre_ind = -1
-    cnt = 0
     while True:
-        cnt += 1
 
         s = get_s(N)
         r = get_r(s)
 
         lll = get_lll(fields, X, s, r, N, eps)
         sum_lll = [x + y for x, y in zip(sum_lll, lll)]
+        sorted_indexes = sorted(enumerate(sum_lll), key=lambda x: x[1], reverse=True)
+        max_p, max_ind = calc_max_p(sorted_indexes[:5])
 
-        max_ll = max(sum_lll)
-        max_ind = sum_lll.index(max_ll)
-        x = X[max_ind]
-        # print("#pre_ind:{}, max_ind:{}".format(pre_ind, max_ind))
+        print("# max_p: {}".format(max_p))
         # for i, j in x:
         #     print("#c {} {} red".format(i, j))
         
         #最も尤度が高い油田の位置が前回の結果と同じなら答えを出力し，返答が1ならbreakする
-        if cnt > 10 and max_ind == pre_ind:
+        if max_p >= 0.9:
+            x = X[max_ind]
             has_oil = get_has_oil(x, fields)
             print("a {} {}".format(len(has_oil), ' '.join(map(lambda x: "{} {}".format(x[0], x[1]), has_oil))))
             resp = input()
