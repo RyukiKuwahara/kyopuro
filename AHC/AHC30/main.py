@@ -1,5 +1,7 @@
 import sys
 import random
+import math
+
 
 def receive_input():
     # read prior information
@@ -38,6 +40,7 @@ def get_s(N):
     for i in range(N):
         for j in range(N):
             random_number = random.random()
+            #0.25以下ならそのマスを占う
             if random_number <= 0.25:
                 s.append((i, j))
     return s
@@ -83,6 +86,59 @@ def get_r(s):
     r = int(input())
     return r
 
+def create_field(N, ele):
+    field = [[ele for _ in range(N)] for _ in range(N)]
+    return field
+
+def calc_overlap_sum(fields, s, x, N):
+    s_field = create_field(N, False)
+    x_field = create_field(N, 0)
+
+    for i, j in s:
+        s_field[i][j] = True
+    for k, (si, sj) in enumerate(x):
+        for i, j in fields[k]:
+            x_field[si+i][sj+j] += 1
+    cnt = 0
+    for i in range(N):
+        for j in range(N):
+            if s_field == True:
+                cnt += x_field[i][j]
+    return cnt
+
+def cnd(x):
+    return (1 + math.erf(x / math.sqrt(2))) / 2
+
+def calc_p_in_range(mu, delta, r):
+    # 標準正規分布への変換
+    z_lower = (r - 0.5 - mu) / delta
+    z_upper = (r + 0.5 - mu) / delta
+    
+    # 累積分布関数の計算
+    prob_lower = cnd(z_lower)
+    prob_upper = cnd(z_upper)
+    # print(z_lower, z_upper, prob_lower, prob_upper, file=sys.stderr)
+    
+    # 範囲内の確率を求める
+    p = max(1e-5, prob_upper - prob_lower)
+
+    return p
+
+def calc_mu_delta(k, vs, eps):
+    mu = (k - vs) * eps + vs * (1 - eps)
+    delta = math.sqrt(k * eps * (1 - eps))
+    return mu, delta
+
+def get_lll(fields, X, s, r, N, eps):
+    lll = []
+    for x in X:
+        vs = calc_overlap_sum(fields, s, x, N)
+        k = len(s)
+        mu, delta = calc_mu_delta(k, vs, eps)
+        
+        p = calc_p_in_range(mu, delta, r)
+        lll.append(-math.log(p))
+    return lll
 
 def solve_Bayes(N, M, eps, fields):
     X = get_X(N, M, fields)
@@ -92,11 +148,13 @@ def solve_Bayes(N, M, eps, fields):
         s = get_s(N)
         r = get_r(s)
 
-        exit(1)
 
-        lll, pl = get_lll(X, s, r)
+        lll = get_lll(fields, X, s, r, N, eps)
         sum_lll = [x + y for x, y in zip(sum_lll, lll)]
-        max_p = calc_max_normalized_p_from_lll()
+
+        max_p = 1 - min(sum_lll) / sum(sum_lll)
+        print(min(sum_lll), file=sys.stderr)
+        exit(1)
         #それぞれの油田の位置の最大確信度の積が90%以上なら答えを出力し，返答が1ならbreakする
         if max_p >= 0.9:
             has_oil = get_has_oil()
