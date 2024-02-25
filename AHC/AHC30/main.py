@@ -102,14 +102,14 @@ def calc_overlap_sum(fields, s, x, N):
     cnt = 0
     for i in range(N):
         for j in range(N):
-            if s_field == True:
+            if s_field[i][j] == True:
                 cnt += x_field[i][j]
     return cnt
 
 def cnd(x):
     return (1 + math.erf(x / math.sqrt(2))) / 2
 
-def calc_p_in_range(mu, delta, r):
+def calc_p_in_range(mu, delta, r, eps):
     # 標準正規分布への変換
     z_lower = (r - 0.5 - mu) / delta
     z_upper = (r + 0.5 - mu) / delta
@@ -120,7 +120,7 @@ def calc_p_in_range(mu, delta, r):
     # print(z_lower, z_upper, prob_lower, prob_upper, file=sys.stderr)
     
     # 範囲内の確率を求める
-    p = max(1e-5, prob_upper - prob_lower)
+    p = max(eps, prob_upper - prob_lower)
 
     return p
 
@@ -136,32 +136,40 @@ def get_lll(fields, X, s, r, N, eps):
         k = len(s)
         mu, delta = calc_mu_delta(k, vs, eps)
         
-        p = calc_p_in_range(mu, delta, r)
-        lll.append(-math.log(p))
+        p = calc_p_in_range(mu, delta, r, 1/len(X)*1e-2)
+        lll.append(math.log(p))
     return lll
 
 def solve_Bayes(N, M, eps, fields):
     X = get_X(N, M, fields)
     sum_lll = [0] * len(X)
-    while True:
+
+    cnt = 0
+    while cnt < 100:
+        cnt += 1
 
         s = get_s(N)
         r = get_r(s)
 
-
         lll = get_lll(fields, X, s, r, N, eps)
         sum_lll = [x + y for x, y in zip(sum_lll, lll)]
 
-        max_p = 1 - min(sum_lll) / sum(sum_lll)
-        print(min(sum_lll), file=sys.stderr)
-        exit(1)
+        max_ll = max(sum_lll)
+        max_ind = sum_lll.index(max_ll)
+        x = X[max_ind]
+        print("#{}".format(max_ll / sum(sum_lll)))
+        for i, j in x:
+            print("#c {} {} red".format(i, j))
+
+
+        
         #それぞれの油田の位置の最大確信度の積が90%以上なら答えを出力し，返答が1ならbreakする
-        if max_p >= 0.9:
-            has_oil = get_has_oil()
-            print("a {} {}".format(len(has_oil), ' '.join(map(lambda x: "{} {}".format(x[0], x[1]), has_oil))))
-            resp = input()
-            if resp == 1:
-                break
+        # if max_p >= 0.9:
+        #     has_oil = get_has_oil()
+        #     print("a {} {}".format(len(has_oil), ' '.join(map(lambda x: "{} {}".format(x[0], x[1]), has_oil))))
+        #     resp = input()
+        #     if resp == 1:
+        #         break
 
 def main():
     N, M, eps, fields = receive_input()
