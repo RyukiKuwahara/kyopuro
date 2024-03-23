@@ -10,7 +10,7 @@ for d in range(D):
     s_i = 0
     for k in range(N):
         a_dk = a[d][k]
-        g_i = s_i + (a_dk + W - 1) // W
+        g_i = min(W, s_i + (a_dk + W - 1) // W)
         rect[d].append((s_i, 0, g_i, W))
         s_i = g_i + 1
 
