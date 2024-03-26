@@ -1,32 +1,44 @@
 import sys
 
-def switch_rect():
+def swap_rect():
+    # print("call swap_rect")
+    # print("\t", r)
     needed_pile_num = dct["pile_cnt"] + pile_num - W
+    # print(r, needed_pile_num)
     # print("dct[pile_nums]: ", dct["pile_nums"])
     for pnf in dct["pile_nums"]:
-        for rr in r:
-            limit_pile_num = W - rr["pile_cnt"]
-            for ind, pnt in enumerate(rr["pile_nums"]):
-                if ind == min_ind:
-                    continue
+        for ind, rr in enumerate(r):
+            if ind == min_ind:
+                continue
+            # print("limit", limit_pile_num)
+            for pnt in rr["pile_nums"]:
+                limit_pile_num = W - rr["pile_cnt"]
                 diff = pnf - pnt
-                if diff >= needed_pile_num and diff <= limit_pile_num:
+                # print("\t", "pnf: ", pnf, "pnt: ", pnt)
+                if diff > 0 and diff <= limit_pile_num:
+                    # print("swap")
                     # print(dct["pile_nums"])
                     ind1 = dct["pile_nums"].index(pnf)
                     ind2 = rr["pile_nums"].index(pnt)
-                    # print(dct["pile_nums"], rr["pile_nums"])
+                    # print("\t", dct["pile_nums"], rr["pile_nums"])
                     dct["pile_nums"][ind1], rr["pile_nums"][ind2] = rr["pile_nums"][ind2], dct["pile_nums"][ind1]
                     dct["ind"][ind1], rr["ind"][ind2] = rr["ind"][ind2], dct["ind"][ind1]
                     dct["pile_cnt"] -= diff
                     rr["pile_cnt"] += diff
-                    # print("swap", ind1, ind2)
-                    # print(dct["pile_nums"], rr["pile_nums"])
-                    dct["pile_nums"].append(pile_num)
-                    dct["pile_cnt"] += pile_num
-                    dct["ind"].append(i)
-                    return
-    print("over", file=sys.stderr)
-    exit(1)
+                    pnf = pnt
+                    # print("\t", "swap", ind1, ind2)
+                    # print("\t", dct["pile_nums"], rr["pile_nums"], "\n")
+                    # print("\t", "pile_cnt", dct["pile_cnt"])
+                    if dct["pile_cnt"] + pile_num <= W:
+                        dct["pile_nums"].append(pile_num)
+                        dct["pile_cnt"] += pile_num
+                        dct["ind"].append(i)
+                        # if dct["pile_cnt"] > W:
+                        #     print("\t", r)
+                        return True
+                
+    # print("over", file=sys.stderr)
+    return False
 
 
 # read input
@@ -61,14 +73,30 @@ for d in range(D):
                 min_ind = j
 
         dct = r[min_ind]
+        if dct["pile_cnt"] == W:
+            # print(dct["pile_nums"])
+            max_ind = dct["pile_nums"].index(max(dct["pile_nums"]))
+            dct["pile_nums"][max_ind] -= 1
+            dct["pile_cnt"] -= 1
+            # print(dct["pile_nums"])
+
         pile_num = (a_dk + W // split_num - 1) // (W // split_num)
         if dct["pile_cnt"] + pile_num <= W:
             dct["pile_nums"].append(pile_num)
             dct["pile_cnt"] += pile_num
-            dct["ind"].append(i)
+            dct["ind"].append(i) 
         else:
-            switch_rect()
-            
+            if not swap_rect():
+                # print(dct, pile_num)
+                pile_num -= dct["pile_cnt"] + pile_num - W
+                dct["pile_nums"].append(pile_num)
+                dct["pile_cnt"] += pile_num
+                dct["ind"].append(i)
+                # print(dct)
+
+        # if dct["pile_cnt"] > W:
+        #     print(r)
+                
     
     rect_d = []
     for i, dct in enumerate(r):
