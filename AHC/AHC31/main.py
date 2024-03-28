@@ -1,4 +1,5 @@
 import sys
+import copy
 
 def swap_rect():
     # print("call swap_rect")
@@ -40,6 +41,23 @@ def swap_rect():
     # print("over", file=sys.stderr)
     return False
 
+def eval_area_cost(a, rects):
+    cost = 0
+    for i in range(len(a)):
+        # print(rects[i][3] - rects[i][1], rects[i][4] - rects[i][2])
+        diff = a[i] - (rects[i][3] - rects[i][1]) * (rects[i][4] - rects[i][2])
+        # print(diff, a[i], (rects[i][3] - rects[i][1]) * (rects[i][4] - rects[i][2]))
+        if diff > 0:
+            cost += 100 * diff
+    return cost
+
+def eval_move_cost(N, f, t):
+    cost = 0
+    if f != t:
+        cost += (f + t) * W
+    cost += W // f * N * 2 + W // t * N * 2
+    return cost
+
 
 # read input
 W, D, N = map(int, input().split())
@@ -49,67 +67,91 @@ for d in range(D):
 
 # determine rectangles
 rect = [[] for _ in range(D)]
+cost = 0
 for d in range(D):
-    # determine split number
+    # determine max split number
     split_nums = [1, 2, 4, 5, 8, 10, 12, 15, 20, 30, 60]
-    max_a = 0
-    for dd in range(D):
-        max_a = max(max_a, a[dd][-1])
-    split_ind = 0
+    max_a = a[d][-1]
+    max_split_ind = 0
     for i, split_num in enumerate(split_nums):
         pile_num = (max_a + W // split_num - 1) // (W // split_num)
         if pile_num > 1000:
             break
-        split_ind = i
+        max_split_ind = i
 
-    split_num = split_nums[split_ind]
+    
     # determine position
-    r = [{"pile_cnt" : 0, "pile_nums" : [], "ind" : []} for _ in range(split_num)]
-    for i, a_dk in enumerate(a[d][::-1]):
-        # search min pile_cnt index
-        min_ind = 0
-        for j, _ in enumerate(r):
-            if r[j]["pile_cnt"] < r[min_ind]["pile_cnt"]:
-                min_ind = j
+    for split_ind in range(max_split_ind + 1):
+        split_num = split_nums[split_ind]
+        r = [{"pile_cnt" : 0, "pile_nums" : [], "ind" : []} for _ in range(split_num)]
+        for i, a_dk in enumerate(a[d][::-1]):
+            # search min pile_cnt index
+            min_ind = 0
+            for j, _ in enumerate(r):
+                if r[j]["pile_cnt"] < r[min_ind]["pile_cnt"]:
+                    min_ind = j
 
-        dct = r[min_ind]
-        if dct["pile_cnt"] == W:
-            # print(dct["pile_nums"])
-            max_ind = dct["pile_nums"].index(max(dct["pile_nums"]))
-            dct["pile_nums"][max_ind] -= 1
-            dct["pile_cnt"] -= 1
-            # print(dct["pile_nums"])
+            dct = r[min_ind]
+            if dct["pile_cnt"] == W:
+                # print(dct["pile_nums"])
+                max_ind = dct["pile_nums"].index(max(dct["pile_nums"]))
+                dct["pile_nums"][max_ind] -= 1
+                dct["pile_cnt"] -= 1
+                # print(dct["pile_nums"])
 
-        pile_num = (a_dk + W // split_num - 1) // (W // split_num)
-        if dct["pile_cnt"] + pile_num <= W:
-            dct["pile_nums"].append(pile_num)
-            dct["pile_cnt"] += pile_num
-            dct["ind"].append(i) 
-        else:
-            if not swap_rect():
-                # print(dct, pile_num)
-                pile_num -= dct["pile_cnt"] + pile_num - W
+            pile_num = (a_dk + W // split_num - 1) // (W // split_num)
+            if dct["pile_cnt"] + pile_num <= W:
                 dct["pile_nums"].append(pile_num)
                 dct["pile_cnt"] += pile_num
-                dct["ind"].append(i)
-                # print(dct)
+                dct["ind"].append(i) 
+            else:
+                if not swap_rect():
+                    # print(dct, pile_num)
+                    pile_num -= dct["pile_cnt"] + pile_num - W
+                    dct["pile_nums"].append(pile_num)
+                    dct["pile_cnt"] += pile_num
+                    dct["ind"].append(i)
+                    # print(dct)
 
-        # if dct["pile_cnt"] > W:
-        #     print(r)
-                
-    
-    rect_d = []
-    for i, dct in enumerate(r):
-        s_i = 0
-        for pile_num, ind in zip(dct["pile_nums"], dct["ind"]):
-            rect_d.append((ind, s_i, W // split_num * i, s_i + pile_num, W // split_num * (i + 1)))
-            s_i += pile_num
-    rect_d = sorted(rect_d, key=lambda x: x[0])
-    rect[d] = rect_d
-    
+            # if dct["pile_cnt"] > W:
+            #     print(r)
+                    
+        
+        rect_d = []
+        for i, dct in enumerate(r):
+            s_i = 0
+            for pile_num, ind in zip(dct["pile_nums"], dct["ind"]):
+                rect_d.append((ind, s_i, W // split_num * i, s_i + pile_num, W // split_num * (i + 1)))
+                s_i += pile_num
 
+        rect_d = sorted(rect_d, key=lambda x: x[0], reverse=True)
+        rect[d].append(rect_d)
+
+candinates = []
+for i in range(len(rect[0])):
+    cost = eval_area_cost(a[0], rect[0][i])
+    candinates.append({"cost":cost, "path":[i]})
+
+for d in range(D-1):
+    new_candinates = []
+    for candinate in candinates:
+        for j in range(len(rect[d+1])):
+            # print(candinate, candinate["path"][-1])
+            f = split_nums[candinate["path"][-1]]
+            t = split_nums[j]
+            cost = candinate["cost"] + eval_move_cost(N, f, t) + eval_area_cost(a[d+1], rect[d+1][j])
+            path = copy.deepcopy(candinate["path"])
+            path.append(j)
+            new_candinates.append({"cost":cost, "path":path})
+    new_candinates = sorted(new_candinates, key=lambda x: x["cost"])[:10]
+    candinates = new_candinates
+    # print(candinates)
+
+best_path = candinates[0]["path"]
+# print(candinates)
 # output
 for d in range(D):
-    for ele in rect[d][::-1]:
+    ind = best_path[d]
+    for ele in rect[d][ind]:
         i0, j0, i1, j1 = ele[1:]
         print(i0, j0, i1, j1)
