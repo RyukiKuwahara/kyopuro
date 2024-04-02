@@ -1,5 +1,11 @@
 import sys
 import copy
+import bisect
+
+def calculate_rectangle_area(i0, j0, i1, j1):
+    width = abs(j1 - j0)
+    height = abs(i1 - i0)
+    return width * height
 
 def swap_rect():
     # print("call swap_rect")
@@ -52,11 +58,18 @@ def eval_area_cost(a, rects):
     return cost
 
 def eval_move_cost(N, f, t):
-    cost = 0
-    if f != t:
-        cost += (f + t) * W
-    cost += W // f * N * 2 + W // t * N * 2
-    return cost
+    if f == -1 and t == -1:
+        return N * 500 * 2
+    elif f == -1:
+        return N * 500 + t * W + W // t * N * 2
+    elif t == -1:
+        return N * 500 + f * W + W // f * N * 2
+    else:
+        cost = 0
+        if f != t:
+            cost += (f + t) * W
+        cost += W // f * N * 2 + W // t * N * 2
+        return cost
 
 
 # read input
@@ -127,23 +140,106 @@ for d in range(D):
         rect_d = sorted(rect_d, key=lambda x: x[0], reverse=True)
         rect[d].append(rect_d)
 
+    rect_special = []
+    tate, yoko = W, W
+    used = [False for _ in range(N)]
+    for i, a_dk in enumerate(a[d][::-1]):
+        if used[N - i - 1]:
+            continue
+        if tate >= yoko:
+            start_of_pile_num = (a_dk + yoko - 1) // yoko
+            if tate - start_of_pile_num <= 0:
+                rect_special.append((N - i - 1, W - tate, W - yoko, W - tate + 1, W))
+                tate -= 1
+                continue
+            useless_area = abs(a_dk - yoko * start_of_pile_num)
+            candidates = [(N - i - 1, W - tate, W - yoko, W - tate + start_of_pile_num, W)]
+            for pile_num in range(start_of_pile_num, min(W, start_of_pile_num * 2)):
+                diff = yoko * pile_num - a_dk
+                upper = diff // pile_num * pile_num
+                ind = bisect.bisect_right(a[d], upper) - 1
+                if ind < 0 or ind == N - i - 1:
+                    continue
+
+                area1 = calculate_rectangle_area(W - tate, W - yoko, W - tate + pile_num, W - diff // pile_num)
+                area2 = calculate_rectangle_area(W - tate, W - diff // pile_num, W - tate + pile_num, W)
+
+                if not used[ind] and abs(abs(a_dk - area1) + abs(a[d][ind] - area2)) < useless_area:
+                    useless_area = abs(abs(a_dk - area1) + abs(a[d][ind] - area2))
+                    candidates = []
+                    candidates.append((N - i - 1,  W - tate, W - yoko, W - tate + pile_num, W - diff // pile_num))
+                    candidates.append((ind, W - tate, W - diff // pile_num, W - tate + pile_num, W))
+            
+            for candidate in candidates:
+                rect_special.append(candidate)
+                used[candidate[0]] = True
+                pile_num = candidate[3] - candidate[1]
+            tate -= pile_num
+        else :
+            start_of_pile_num = (a_dk + tate - 1) // tate
+            if yoko - start_of_pile_num <= 0:
+                rect_special.append((N - i - 1, W - tate, W - yoko, W, W - yoko + 1))
+                yoko -= 1
+                continue
+            useless_area = abs(a_dk - tate * start_of_pile_num)
+            candidates = [(N - i - 1, W - tate, W - yoko, W, W - yoko + start_of_pile_num)]
+            for pile_num in range(start_of_pile_num, min(W, start_of_pile_num * 2)):
+                diff = tate * pile_num - a_dk
+                upper = diff // pile_num * pile_num
+                ind = bisect.bisect_right(a[d], upper) - 1
+                if ind < 0 or ind == N - i - 1:
+                    continue
+
+                area1 = calculate_rectangle_area(W - tate, W - yoko, W - diff // pile_num, W - yoko + pile_num)
+                area2 = calculate_rectangle_area(W - diff // pile_num, W - yoko, W, W - yoko + pile_num)
+
+                if not used[ind] and abs(abs(a_dk - area1) + abs(a[d][ind] - area2)) < useless_area:
+                    useless_area = abs(abs(a_dk - area1) + abs(a[d][ind] - area2))
+                    candidates = []
+                    candidates.append((N - i - 1,  W - tate, W - yoko, W - diff // pile_num, W - yoko + pile_num))
+                    candidates.append((ind, W - diff // pile_num, W - yoko, W, W - yoko + pile_num))
+            
+            for candidate in candidates:
+                rect_special.append(candidate)
+                used[candidate[0]] = True
+                pile_num = candidate[4] - candidate[2]
+            yoko -= pile_num
+
+    rect[d].append(sorted(rect_special, key=lambda x: x[0]))
+
 candinates = []
 for i in range(len(rect[0])):
     cost = eval_area_cost(a[0], rect[0][i])
-    candinates.append({"cost":cost, "path":[i]})
+    if i == len(rect[0]) - 1:
+        candinates.append({"cost":cost, "path":[-1]})
+    else:
+        candinates.append({"cost":cost, "path":[i]})
 
 for d in range(D-1):
     new_candinates = []
     for candinate in candinates:
         for j in range(len(rect[d+1])):
             # print(candinate, candinate["path"][-1])
-            f = split_nums[candinate["path"][-1]]
-            t = split_nums[j]
+            if candinate["path"][-1] == -1:
+                f = -1
+            else:
+                f = split_nums[candinate["path"][-1]]
+
+            if j == len(rect[d+1]) - 1:
+                t = -1
+            else:
+                t = split_nums[j]
             cost = candinate["cost"] + eval_move_cost(N, f, t) + eval_area_cost(a[d+1], rect[d+1][j])
+            # if d == 0:
+            #     print("f", f, "t", t, "candi[cost]", candinate["cost"], "move cost", eval_move_cost(N, f, t), "area cost", eval_area_cost(a[d+1], rect[d+1][j]))
             path = copy.deepcopy(candinate["path"])
-            path.append(j)
+            if j == len(rect[d+1]) - 1:
+                path.append(-1)
+            else:
+                path.append(j)
+
             new_candinates.append({"cost":cost, "path":path})
-    new_candinates = sorted(new_candinates, key=lambda x: x["cost"])[:10]
+    new_candinates = sorted(new_candinates, key=lambda x: x["cost"])[:30]
     candinates = new_candinates
     # print(candinates)
 
